@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Registration</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#registerBtn").click(function() {
+                var name = $("#name").val();
+                var branch = $("#branch").val();
+                var contact = $("#contact").val();
+                var marks = $("#marks").val();
+
+                if (name === "" || branch === "" || contact === "" || marks === "") {
+                    $("#registerResult").text("Please fill in all the fields.");
+                    return;
+                }
+
+                var student = {
+                    name: name,
+                    branch: branch,
+                    contact: contact,
+                    marks: marks
+                };
+
+                $.ajax({
+                    url: "/api/students/register",
+                    type: "POST",
+                    data: JSON.stringify(student),
+                    contentType: "application/json",
+                    success: function(response) {
+                        $("#registerResult").text("Student registered successfully.");
+                        // Clear input fields after successful registration
+                        $("#name").val("");
+                        $("#branch").val("");
+                        $("#contact").val("");
+                        $("#marks").val("");
+                    },
+                    error: function() {
+                        $("#registerResult").text("Error occurred while registering student.");
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<h1>Student Registration</h1>
+<label for="name">Name:</label>
+<input type="text" id="name" name="name">
+<br>
+<label for="branch">Branch:</label>
+<input type="text" id="branch" name="branch">
+<br>
+<label for="contact">Contact:</label>
+<input type="text" id="contact" name="contact">
+<br>
+<label for="marks">Marks:</label>
+<input type="text" id="marks" name="marks">
+<br>
+<button id="registerBtn">Register</button>
+<br>
+<br>
+<div id="registerResult"></div>
+</body>
+</html>
